@@ -9,12 +9,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct STRUCT_MATRIZES{
-	int tamanho_col;//representa coluna
-	int tamanho_lin;//representa linha
-    int **matriz;
-}Struct_Matrizes;//typedef de struct para facilitar chamadas
+#include "arquivo.h"
 
 Struct_Matrizes* Aloca_Struct(){
 //funcao responsavel por alocar a struct de matriz na memoria
@@ -42,6 +37,7 @@ void Mostra_matriz(Struct_Matrizes * struct_matrizes){
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 void Le_arquivo(FILE *Leitura, Struct_Matrizes *struct_matriz){
@@ -63,32 +59,5 @@ void Le_arquivo(FILE *Leitura, Struct_Matrizes *struct_matriz){
                 getc(Leitura);//pula espaco
             }
         }
-        //getc(Leitura);//pula \n
     }
-}
-
-int main(int argc, char const *argv[]){
-   FILE *arquivo_Leitura;//Cria ponteiro para abrir arquivos de entrada
-   if(argc == 3){//Verifica a quantidade de argumentos passados
-        arquivo_Leitura = fopen(argv[1],"r");
-        //Abre o arquivo 1
-        if(arquivo_Leitura == NULL){
-            printf("\n%s não é um arquivo/caminho válido\n",argv[1]);
-            return 0;//sai
-        }//Caso o Arquivo não exista
-        Struct_Matrizes *struct_matrizA = Aloca_Struct();//Aloca Struct para matriz A
-        Struct_Matrizes *struct_matrizB = Aloca_Struct();//Aloca Struct para matriz B
-        Le_arquivo(arquivo_Leitura, struct_matrizA);//Le o arquivo referente a matriz A e preenche a mesma
-        fclose(arquivo_Leitura);//fecha o arquivo
-        arquivo_Leitura = fopen(argv[2],"r");//abre o arquvio referente a matriz B
-        if(arquivo_Leitura == NULL){//Caso erro ao abrir
-            printf("\n%s não é um arquivo/caminho válido\n",argv[2]);
-            return 0;//sai
-        }
-        Mostra_matriz(struct_matrizA);
-        Le_arquivo(arquivo_Leitura, struct_matrizB);//Le arquivo referente a matriz B e preenche a mesma
-        fclose(arquivo_Leitura);//fecha arquvivo de leitura
-        Mostra_matriz(struct_matrizB);
-    }
-   
 }

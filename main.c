@@ -46,7 +46,12 @@ void preenche_vetorMatrizB(int *v){
 void *Multiplica_celulas(void *param){
     int *vetorA = Vetor_matrizA();
     int *vetorB = Vetor_matrizB();
-
+    preenche_vetorMatrizA(vetorA);
+    preenche_vetorMatrizB(vetorB);
+    for(int i = 0; i < struct_matrizB->tamanho_lin; i++){
+        printf("%i ",vetorB[i]);
+    }
+    printf("\n");
     pthread_exit(0);
 }
 

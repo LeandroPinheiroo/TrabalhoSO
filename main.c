@@ -26,7 +26,7 @@ int c_matrizc_linha = 0;
 int c_matrizc_coluna = 0;
 
 //variavel que armazena as somas
-int soma;
+
 
 int* Vetor_matrizA(){
     int *vetor = (int*)malloc(struct_matrizA->tamanho_col * sizeof(int));
@@ -53,32 +53,48 @@ void preenche_vetorMatrizB(int *v){
 //função de multiplicar as celulas que cada thread vai executar uma vez
 void *Multiplica_celulas(void *param){
     //zera a soma, para somar os valores da linha e coluna
-    soma = 0;
+    int soma; soma = 0;
     //cria os vetores que vao receber uma linha e uma coluna das matrizes A e B
     int *vetorA = Vetor_matrizA();
     int *vetorB = Vetor_matrizB();
     //preenche os dois vetores com a linha e coluna respectiva
     preenche_vetorMatrizA(vetorA);
+    //Mostra_vetor(vetorA,struct_matrizA->tamanho_col);
     preenche_vetorMatrizB(vetorB);
+    //Mostra_vetor(vetorB,struct_matrizB->tamanho_lin);
+    //printf("\n");
     //realiza a soma de acordo com os indices dos vetores
     for(int i = 0; i < struct_matrizA->tamanho_col; i++){
-        soma+= vetorA[i] * vetorB[i];
+        soma += vetorA[i] * vetorB[i];
     }
-    printf("%i ",soma);
     //salva o valor na matriz, entretanto tem de controlar o indice da coluna e da linha
-    //struct_matrizC->matriz[c_matrizc_linha][c_matrizc_coluna] = soma;
+    struct_matrizC->matriz[c_matrizc_linha][c_matrizc_coluna] = soma;
     c_matrizc_coluna++;
-    //verifica se ja está 
+    //verifica se ja está no final da coluna da matriz c
     if(c_matrizc_coluna == struct_matrizC->tamanho_col){
+        //se chegou ao final, zera a coluna e incrementa a linha
         c_matrizc_coluna = 0;
         c_matrizc_linha++;
     }
+    //
     controle_matB_coluna++;
     if(controle_matB_coluna == struct_matrizB->tamanho_col){
         controle_matB_coluna = 0;
         controle_matA_linha++;
     }
+    free(vetorA);
+    free(vetorB);
     pthread_exit(0);
+}
+
+void limpa_tudo(){
+    free(struct_matrizA);
+    free(struct_matrizB);
+    free(struct_matrizC);
+    controle_matA_linha = 0;
+    controle_matB_coluna = 0;
+    c_matrizc_coluna = 0;
+    c_matrizc_linha = 0;
 }
 
 int main(int argc, char const *argv[]){
@@ -93,7 +109,6 @@ int main(int argc, char const *argv[]){
         struct_matrizA = Aloca_Struct();//Aloca Struct para matriz A
         struct_matrizB = Aloca_Struct();//Aloca Struct para matriz B
         struct_matrizC = Aloca_Struct();//Aloca Struct para matriz C
-        struct_matrizC->matriz = Cria_matriz(struct_matrizA->tamanho_lin,struct_matrizB->tamanho_col);
         Le_arquivo(arquivo_Leitura, struct_matrizA);//Le o arquivo referente a matriz A e preenche a mesma
         fclose(arquivo_Leitura);//fecha o arquivo
         arquivo_Leitura = fopen(argv[2],"r");//abre o arquvio referente a matriz B
@@ -110,6 +125,9 @@ int main(int argc, char const *argv[]){
         */
         /*variável para guardar a quantidade de elementos dos vetores de atributos e ids
         de threads*/
+        struct_matrizC->matriz = Cria_matriz(struct_matrizA->tamanho_lin,struct_matrizB->tamanho_col);
+        struct_matrizC->tamanho_lin = struct_matrizA->tamanho_lin;
+        struct_matrizC->tamanho_col = struct_matrizB->tamanho_col;
         int tamanho = struct_matrizA->tamanho_lin * struct_matrizB->tamanho_col;
         /*cria o vetor de atributos das threads*/
         pthread_attr_t atributothreads[tamanho];
@@ -130,10 +148,12 @@ int main(int argc, char const *argv[]){
                  exit(1);
              }
         }
-        printf("\n");
+        Mostra_matriz(struct_matrizC);
+        limpa_tudo();
     }
     else if(argc == 1){
         printf("Falta passar os dois arquivos de matrizes como parametro\n");
     }
+    limpa_tudo();
     return 0;
 }

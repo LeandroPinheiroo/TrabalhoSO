@@ -10,5 +10,5 @@ Struct_Matrizes* Aloca_Struct();//função que aloca memoria para a struct
 int** Cria_matriz(int linha, int coluna);//função que cria a matriz
 void Mostra_matriz(Struct_Matrizes * struct_matrizes);//função que mostra a matriz
 void Le_arquivo(FILE *Leitura, Struct_Matrizes *struct_matriz);//função que le o arquivo
-
+void Mostra_vetor(int *p, int tamanho);//função para mostra o vetor
 #endif

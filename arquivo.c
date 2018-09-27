@@ -26,6 +26,13 @@ int** Cria_matriz(int linha, int coluna){
     //e assim que criada a matriz, retorna os ponteiros para ela*/
     return(matriz);
 }
+
+void Mostra_vetor(int *p, int tamanho){
+    for(int i = 0; i < tamanho; i++){
+        printf("%i ",p[i]);
+    }
+    printf("\n");
+}
 //Função para mostrar a matriz
 void Mostra_matriz(Struct_Matrizes * struct_matrizes){
     //para linhas

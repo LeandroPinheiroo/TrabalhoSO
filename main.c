@@ -16,53 +16,37 @@ Struct_Matrizes *struct_matrizA;
 Struct_Matrizes *struct_matrizB;
 Struct_Matrizes *struct_matrizC;
 
-typedef struct VETOR{
-    int *vet;
-}Vetor;
+//controle da matriz A, controla a coluna que ela lê, as linhas são controladas pelo laço
+int controle_matA_linha = 0;
+//controla da matriz B, controla a linha que ela lê, as colunas são controladas pelo laço
+int controle_matB_coluna = 0;
 
-Vetor *coluna;
-Vetor *linha;
-int controle_matA;
-int controle_matB;
-
-void Aloca_vetor(int *p, int tamanho){
-    p = (int*)malloc(tamanho * sizeof(int));
+int* Vetor_matrizA(){
+    int *vetor = (int*)malloc(struct_matrizA->tamanho_col * sizeof(int));
+    return vetor;
 }
 
-Vetor* Aloca_vetor_struct(){
-//funcao responsavel por alocar a struct de matriz na memoria
-    Vetor *vetor = (Vetor*)malloc(sizeof(struct VETOR));//aloca na memoria
-    return vetor;//retorna a struct
+int* Vetor_matrizB(){
+    int *vetor = (int*)malloc(struct_matrizB->tamanho_lin * sizeof(int));
+    return vetor;
 }
 
-void preenche_matrizA(){
-    for(int i = 0; i < struct_matrizA->tamanho_lin; i++){
-        coluna->vet[i] = struct_matrizA->matriz[i][controle_matA];
+void preenche_vetorMatrizA(int *v){
+    for(int i = 0; i < struct_matrizA->tamanho_col; i++){
+        v[i] = struct_matrizA->matriz[controle_matA_linha][i];
     }
 }
 
-void preenche_matrizB(){
-    for(int i = 0; i < struct_matrizB->tamanho_col; i++){
-        linha->vet[i] = struct_matrizB->matriz[controle_matB][i];
+void preenche_vetorMatrizB(int *v){
+    for(int j = 0; j < struct_matrizB->tamanho_lin; j++){
+        v[j] = struct_matrizB->matriz[j][controle_matB_coluna];
     }
 }
 
 void *Multiplica_celulas(void *param){
-    Aloca_vetor(coluna->vet,struct_matrizA->tamanho_lin);
-    Aloca_vetor(linha->vet,struct_matrizB->tamanho_col);
-    preenche_matrizA();
-    preenche_matrizB();
-    controle_matB++;
-    if(controle_matB == struct_matrizB->tamanho_lin){
-        controle_matB = 0;
-        controle_matA++;
-    }
-    int soma = 0;
-    for(int i = 0; i < struct_matrizB->tamanho_col; i++){
-        soma += linha->vet[i] * coluna->vet[i];
-        printf("%d\t",soma);
-    }printf("\n");
-    soma =0;
+    int *vetorA = Vetor_matrizA();
+    int *vetorB = Vetor_matrizB();
+
     pthread_exit(0);
 }
 
@@ -88,10 +72,6 @@ int main(int argc, char const *argv[]){
         Le_arquivo(arquivo_Leitura, struct_matrizB);//Le arquivo referente a matriz B e preenche a mesma
         fclose(arquivo_Leitura);//fecha arquvivo de leitura
         Mostra_matriz(struct_matrizB);
-        coluna= Aloca_vetor_struct();
-        linha= Aloca_vetor_struct();
-        
-        
         /*
             threads
         */

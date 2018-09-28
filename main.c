@@ -76,17 +76,21 @@ void *Multiplica_celulas(void *param){
         c_matrizc_coluna = 0;
         c_matrizc_linha++;
     }
-    //
+    //incrementa a coluna para preencher o vetor
     controle_matB_coluna++;
+    //verifica se o ja chegou ao final da coluna da matriz B
     if(controle_matB_coluna == struct_matrizB->tamanho_col){
+        //zera a variavel que controla a coluna
         controle_matB_coluna = 0;
+        //e soma mais um a linha
         controle_matA_linha++;
     }
+    //libera os dois vetores
     free(vetorA);
     free(vetorB);
     pthread_exit(0);
 }
-
+//função para dar free em tudo e zerar as variaveis
 void limpa_tudo(){
     free(struct_matrizA);
     free(struct_matrizB);
@@ -96,7 +100,7 @@ void limpa_tudo(){
     c_matrizc_coluna = 0;
     c_matrizc_linha = 0;
 }
-
+//função principal
 int main(int argc, char const *argv[]){
    FILE *arquivo_Leitura;//Cria ponteiro para abrir arquivos de entrada
    if(argc == 3){//Verifica a quantidade de argumentos passados
@@ -116,18 +120,23 @@ int main(int argc, char const *argv[]){
             printf("\n%s não é um arquivo/caminho válido\n",argv[2]);
             return 0;//sai
         }
-        Mostra_matriz(struct_matrizA);
+        Mostra_matriz(struct_matrizA);//mostra a matriz A
         Le_arquivo(arquivo_Leitura, struct_matrizB);//Le arquivo referente a matriz B e preenche a mesma
         fclose(arquivo_Leitura);//fecha arquvivo de leitura
-        Mostra_matriz(struct_matrizB);
+        Mostra_matriz(struct_matrizB);//mostra a matriz B
         /*
             threads
         */
         /*variável para guardar a quantidade de elementos dos vetores de atributos e ids
         de threads*/
+        //cria a matriz C
         struct_matrizC->matriz = Cria_matriz(struct_matrizA->tamanho_lin,struct_matrizB->tamanho_col);
+        //pega o tamanho da linha da matriz c, que é o mesmo da linha de A
         struct_matrizC->tamanho_lin = struct_matrizA->tamanho_lin;
+        //pega o tamanho da coluna da matriz c, que é o mesmo da coluna de B
         struct_matrizC->tamanho_col = struct_matrizB->tamanho_col;
+        //variavel tamanho, multiplica a linha da matriz A com a coluna da B para encontra o tamanho
+        //da nova matriz
         int tamanho = struct_matrizA->tamanho_lin * struct_matrizB->tamanho_col;
         /*cria o vetor de atributos das threads*/
         pthread_attr_t atributothreads[tamanho];
@@ -143,14 +152,18 @@ int main(int argc, char const *argv[]){
         }
         /*threads em execução, aguardando elas terminarem suas execuções*/
         for(int i = 0; i < tamanho; i++){
+            //em caso da thread der erro na execução, aborta a aplicação
              if(pthread_join(idthreads[i],NULL) != 0){
                  printf("Erro na execução da thread: %i\n", i);
                  exit(1);
              }
         }
+        //mostra a matriz C
         Mostra_matriz(struct_matrizC);
+        //limpa todos os ponteiros e zera as variaveis
         limpa_tudo();
     }
+    //em caso de argumentos faltando por parametro, mostra mensagem de erro
     else if(argc == 1){
         printf("Falta passar os dois arquivos de matrizes como parametro\n");
     }

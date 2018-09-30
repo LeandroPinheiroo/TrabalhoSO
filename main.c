@@ -25,26 +25,24 @@ int controle_matB_coluna = 0;
 int c_matrizc_linha = 0;
 int c_matrizc_coluna = 0;
 
-//variavel que armazena as somas
 
-
-int* Vetor_matrizA(){
-    int *vetor = (int*)malloc(struct_matrizA->tamanho_col * sizeof(int));
+float* Vetor_matrizA(){
+    float *vetor = (float*)malloc(struct_matrizA->tamanho_col * sizeof(float));
     return vetor;
 }
 
-int* Vetor_matrizB(){
-    int *vetor = (int*)malloc(struct_matrizB->tamanho_lin * sizeof(int));
+float* Vetor_matrizB(){
+    float *vetor = (float*)malloc(struct_matrizB->tamanho_lin * sizeof(float));
     return vetor;
 }
 
-void preenche_vetorMatrizA(int *v){
+void preenche_vetorMatrizA(float *v){
     for(int i = 0; i < struct_matrizA->tamanho_col; i++){
         v[i] = struct_matrizA->matriz[controle_matA_linha][i];
     }
 }
 
-void preenche_vetorMatrizB(int *v){
+void preenche_vetorMatrizB(float *v){
     for(int j = 0; j < struct_matrizB->tamanho_lin; j++){
         v[j] = struct_matrizB->matriz[j][controle_matB_coluna];
     }
@@ -53,10 +51,10 @@ void preenche_vetorMatrizB(int *v){
 //função de multiplicar as celulas que cada thread vai executar uma vez
 void *Multiplica_celulas(void *param){
     //zera a soma, para somar os valores da linha e coluna
-    int soma; soma = 0;
+    float soma; soma = 0;
     //cria os vetores que vao receber uma linha e uma coluna das matrizes A e B
-    int *vetorA = Vetor_matrizA();
-    int *vetorB = Vetor_matrizB();
+    float *vetorA = Vetor_matrizA();
+    float *vetorB = Vetor_matrizB();
     //preenche os dois vetores com a linha e coluna respectiva
     preenche_vetorMatrizA(vetorA);
     //Mostra_vetor(vetorA,struct_matrizA->tamanho_col);
@@ -160,6 +158,8 @@ int main(int argc, char const *argv[]){
         }
         //mostra a matriz C
         Mostra_matriz(struct_matrizC);
+        //salva ela no arquivo
+        Salva_arquivo(struct_matrizC);
         //limpa todos os ponteiros e zera as variaveis
         limpa_tudo();
     }

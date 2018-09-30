@@ -35,9 +35,12 @@ void Mostra_vetor(float *p, int tamanho){
 }
 //Função para mostrar a matriz
 void Mostra_matriz(Struct_Matrizes * struct_matrizes){
-    //para linhas
+    //mostra as linhas
+    printf("%i\n",struct_matrizes->tamanho_lin);
+    printf("%i\n",struct_matrizes->tamanho_col);
+    //primeiro for para linhas
     for(int i = 0; i < struct_matrizes->tamanho_lin; i++){
-        //para as colunas
+        //segundo para as colunas
         for(int j = 0; j < struct_matrizes->tamanho_col; j++){
             //mostra o elemento
             printf("%f ",struct_matrizes->matriz[i][j]);
@@ -76,9 +79,12 @@ void Le_arquivo(FILE *Leitura, Struct_Matrizes *struct_matriz){
 //função para salvar o arquivo da matriz C
 void Salva_arquivo(Struct_Matrizes *matc){
     //abre o arquivo em modo de leitura
-    FILE* arquivo = fopen("matrizC.txt","w");
+    FILE* arquivo = fopen("resultado.txt","w");
     //verifica se não houve erro na leitura
     if(arquivo != NULL){
+        //salva a linha e a coluna no arquivo
+        fprintf(arquivo,"%i\n",matc->tamanho_lin);
+        fprintf(arquivo,"%i\n",matc->tamanho_col);
         //senão houve, salva a matriz no arquivo
         for(int i = 0; i < matc->tamanho_lin; i++){
             for(int j = 0; j < matc->tamanho_col; j++){

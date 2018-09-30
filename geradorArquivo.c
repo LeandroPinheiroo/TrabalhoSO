@@ -1,24 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <time.h>
 
 void main(int argc, char const *argv[]){
-    if(argc == 4 && argv[1] != NULL && argv[2] != NULL && argv[3] != NULL){
+    if(argc == 2 && argv[1] != NULL){
+        srand(time(NULL));
         char caminho[100]; strcpy(caminho,argv[1]);
-        int tamanho_linha = atoi(argv[2]);
-        int tamanho_coluna = atoi(argv[3]);
+        int tamanho_linha = rand() % 6 + 1;
+        int tamanho_coluna = rand() % 6 + 1;
+        float valor;
         FILE *arquivo = fopen(caminho,"w");
-        if(arquivo != NULL){
+        if(arquivo != NULL){ 
+            fprintf(arquivo,"%i\n",tamanho_linha);
+            fprintf(arquivo,"%i\n",tamanho_coluna);
             for(int i = 0; i < tamanho_linha; i++){
                 for(int j = 0; j < tamanho_coluna; j++){
-                    fprintf(file,"%f")
+                    valor = (float)(rand() % 100 + 1) / (rand() % 10 + 1);
+                    fprintf(arquivo,"%f ",valor);
                 }
+                fprintf(arquivo,"\n");
             }
         }
 
     }else{
-        printf("É necessário passar o tamanho de linha, de coluna e o caminho/nome do arquivo de matriz!\n");
-        printf("A ordem correta do parametro é caminho/nome,linha e por fim coluna\n");
+        printf("É necessário passar o caminho/nome do arquivo de matriz!\n");
     }
 }

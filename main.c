@@ -25,23 +25,23 @@ int controle_matB_coluna = 0;
 int c_matrizc_linha = 0;
 int c_matrizc_coluna = 0;
 
-
+//função para alocar memoria para o vetor que receberá uma linha da matriz a
 float* Vetor_matrizA(){
     float *vetor = (float*)malloc(struct_matrizA->tamanho_col * sizeof(float));
     return vetor;
 }
-
+//função para alocar memoria para o vetor que receberá uma coluna da matriz b
 float* Vetor_matrizB(){
     float *vetor = (float*)malloc(struct_matrizB->tamanho_lin * sizeof(float));
     return vetor;
 }
-
+//função para jogar os valores da linha da matriz A para o vetor que foi alocado acima
 void preenche_vetorMatrizA(float *v){
     for(int i = 0; i < struct_matrizA->tamanho_col; i++){
         v[i] = struct_matrizA->matriz[controle_matA_linha][i];
     }
 }
-
+//função para jogar os valores da coluna da matriz B para o vetor que foi alocado acima 
 void preenche_vetorMatrizB(float *v){
     for(int j = 0; j < struct_matrizB->tamanho_lin; j++){
         v[j] = struct_matrizB->matriz[j][controle_matB_coluna];

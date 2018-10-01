@@ -122,6 +122,10 @@ int main(int argc, char const *argv[]){
         Le_arquivo(arquivo_Leitura, struct_matrizB);//Le arquivo referente a matriz B e preenche a mesma
         fclose(arquivo_Leitura);//fecha arquvivo de leitura
         Mostra_matriz(struct_matrizB);//mostra a matriz B
+        if(struct_matrizA->tamanho_col != struct_matrizB->tamanho_lin){//Verifica se eh possivel realizar a multiplicacao das matrizes
+            printf("\nNão é possivel realizar a multiplicação das matrizes passadas\n");//mostra mensagem de erro
+            return 0;//sai
+        }
         /*
             threads
         */
@@ -167,6 +171,6 @@ int main(int argc, char const *argv[]){
     else if(argc == 1){
         printf("Falta passar os dois arquivos de matrizes como parametro\n");
     }
-    limpa_tudo();
+    limpa_tudo();//limpa structs para evitar erros
     return 0;
 }
